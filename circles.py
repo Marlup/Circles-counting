@@ -3,6 +3,7 @@ from tqdm import tqdm
 import h5py
 import os
 from multiprocessing import Pool
+import pandas as pd
 
 def run_multiprocess(func, n_processes, *args):
     pool = Pool(processes=n_processes)
@@ -74,12 +75,23 @@ def make_simple_dataset(
 def in_circle(x, c, r):
     return int(((x[0] - c[0]) ** 2 + (x[1] - c[1]) ** 2) <= r**2)
 
+def df_evaluation(error, pred):
+    pred_round = np.round(pred).astype('uint8')
+    df = pd.DataFrame(data={'error': error.reshape(-1),
+                            'pred': pred_round.reshape(-1)},
+                            columns=[
+                                'error',
+                                'pred'
+                                ]
+                                )
+    return df.sort_values("pred")
+
 # Functions for images of complex circles 
 def make_complex_circle(
     n_circles=10,
     img_size=128,
     r0=None, 
-    min_r=0.5, 
+    min_r=1.0, 
     max_r=2.0, 
     box_lower_bound=-10.0, 
     box_higher_bound=10.0, 
