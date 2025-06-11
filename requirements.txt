@@ -1,0 +1,8 @@
+pydot
+h5py
+tensorflow
+numpy
+matplotlib
+pandas
+seaborn
+graphviz
